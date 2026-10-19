@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071426">
+  <meta name="description" content="株式を中心に、お金・経済・金融政策の情報を深掘り。データとチャートで、ニュースの裏側を考える投資分析コンテンツ。">
+  <title>株式を中心とした、お金の情報の裏側まで。｜Beyond the Headlines</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="トップページ">
+      <span class="brand-mark">BH</span>
+      <span class="brand-copy"><strong>BEYOND THE HEADLINES</strong><small>知るほど、未来は変わる。</small></span>
+    </a>
+    <button class="menu-toggle" aria-label="メニューを開く" aria-expanded="false">☰</button>
+    <nav class="main-nav" aria-label="メインナビゲーション">
+      <a href="#contents">コンテンツ</a><a href="#categories">テーマ別に探す</a><a href="#about">このサイトについて</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="サイト紹介">
+      <img class="hero-image" src="assets/hero-banner.png" alt="株式・経済・金融政策をテーマにしたサイトのイメージ">
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <p class="eyebrow">INVESTING · ECONOMY · DATA</p>
+        <h1>見出しの、その先へ。<br><span>お金の流れを読み解く。</span></h1>
+        <p class="hero-lead">株式を中心に、経済・金融政策・市場データを深掘り。<br>ニュースを知るだけでなく、その背景と次の一手を考えます。</p>
+        <a class="primary-button" href="#contents">分析コンテンツを見る <span>↓</span></a>
+      </div>
+      <div class="hero-caption">BEYOND THE HEADLINES <span>— 知るほど、未来は変わる —</span></div>
+    </section>
+
+    <section class="intro section-wrap" id="about">
+      <div><p class="section-kicker">ABOUT THIS SITE</p><h2>数字の向こう側に、<br>投資のヒントを。</h2></div>
+      <p class="intro-text">株価の動きには、企業業績だけでなく、金利・為替・政策・投資家心理など、さまざまな要因が関わっています。このサイトでは、チャートやデータを使って情報を整理し、資産形成に役立つ視点をわかりやすく紹介します。</p>
+    </section>
+
+    <section class="latest-articles section-wrap" id="latest-articles">
+      <div class="section-heading"><div><p class="section-kicker">LATEST ARTICLES</p><h2>最新の記事</h2></div><p>チャートをもとに、市場や投資について考えたこと。</p></div>
+      <div class="article-grid" id="latest-articles-grid" aria-live="polite">
+        <p class="article-empty">記事一覧を読み込んでいます…</p>
+      </div>
+      <p class="article-index-link"><a href="articles.html">記事一覧を見る <span>↗</span></a></p>
+    </section>
+
+    <section class="categories section-wrap" id="categories">
+      <div class="section-heading"><div><p class="section-kicker">EXPLORE BY TOPIC</p><h2>テーマから探す</h2></div><p>気になるテーマから、関連コンテンツへ。</p></div>
+      <div class="category-grid">
+        <a class="category-card" href="#contents" data-category="株式市場"><span class="category-icon">↗</span><strong>株式市場</strong><small>S&P500・NASDAQ・日本株</small></a>
+        <a class="category-card" href="#contents" data-category="AI・テクノロジー"><span class="category-icon">⌘</span><strong>AI・テクノロジー</strong><small>AIバリューチェーン・半導体</small></a>
+        <a class="category-card" href="#contents" data-category="経済・金融政策"><span class="category-icon">◎</span><strong>経済・金融政策</strong><small>金利・インフレ・FRB・日銀</small></a>
+        <a class="category-card" href="#contents" data-category="投資戦略"><span class="category-icon">◇</span><strong>投資戦略</strong><small>資産配分・出口戦略・検証</small></a>
+      </div>
+    </section>
+
+    <section class="content-section" id="contents">
+      <div class="section-wrap">
+        <div class="section-heading"><div><p class="section-kicker">ANALYSIS LIBRARY</p><h2>分析コンテンツ</h2></div><p>データ・チャート・シミュレーションで深掘り。</p></div>
+        <div class="filter-row" role="group" aria-label="コンテンツの絞り込み">
+          <button class="filter-chip active" data-filter="すべて">すべて</button>
+          <button class="filter-chip" data-filter="株式市場">株式市場</button>
+          <button class="filter-chip" data-filter="AI・テクノロジー">AI・テクノロジー</button>
+          <button class="filter-chip" data-filter="経済・金融政策">経済・金融政策</button>
+          <button class="filter-chip" data-filter="投資戦略">投資戦略</button>
+        </div>
+        <div class="content-grid" id="content-grid">
+          <!-- 公開済みコンテンツ：hrefには同じリポジトリ内のHTMLファイル名を設定しています。 -->
+          <a class="content-card featured" href="market_dashboard_live.html" data-category="株式市場"><div class="card-art art-market"><span>MARKET DASHBOARD</span><b>米国市場をまとめて確認</b></div><div class="card-body"><span class="tag">株式市場</span><h3>米国株価ダッシュボード</h3><p>主要な米国株価指数や市場データを、ひとつの画面で確認する。</p><span class="card-link">ダッシュボードを開く <b>↗</b></span></div></a>
+          <a class="content-card" href="SP500_2026_target.html" data-category="株式市場"><div class="card-art art-chart"><span>S&amp;P 500 · FORECAST</span><b>年末の株価水準を考える</b></div><div class="card-body"><span class="tag">株式市場</span><h3>S&amp;P500 年末株価予測</h3><p>各種データをもとに、S&amp;P500の年末目標水準を考える。</p><span class="card-link">予測を見る <b>↗</b></span></div></a>
+          <a class="content-card" href="sp500_per_chart_full.html" data-category="株式市場"><div class="card-art art-policy"><span>S&amp;P 500 · P/E</span><b>株価の評価水準を追う</b></div><div class="card-body"><span class="tag">株式市場</span><h3>予想PER推移</h3><p>S&amp;P500の予想PERの推移から、市場の評価水準を読み解く。</p><span class="card-link">PERチャートを見る <b>↗</b></span></div></a>
+          <a class="content-card" href="sp500_eps_price_updated.html" data-category="株式市場"><div class="card-art art-chart"><span>PRICE · EPS</span><b>株価と利益の関係</b></div><div class="card-body"><span class="tag">株式市場</span><h3>株価・EPSチャート</h3><p>S&amp;P500の株価と1株当たり利益（EPS）の動きを比較する。</p><span class="card-link">チャートを見る <b>↗</b></span></div></a>
+          <a class="content-card" href="sp500_drawdown_style.html" data-category="株式市場"><div class="card-art art-flow"><span>YEAR-TO-DATE · DRAWDOWN</span><b>高値からの下落を確認</b></div><div class="card-body"><span class="tag">株式市場</span><h3>年初来ドローダウン推移</h3><p>年初来の高値から、株価がどの程度下落しているかを追う。</p><span class="card-link">推移を見る <b>↗</b></span></div></a>
+          <a class="content-card" href="ytd_animation_vertical.html" data-category="株式市場"><div class="card-art art-market"><span>YTD · INDEX COMPARISON</span><b>主要指数の成績を比較</b></div><div class="card-body"><span class="tag">株式市場</span><h3>主要指数騰落率比較</h3><p>主要株価指数の年初来騰落率を、動きのあるチャートで比較する。</p><span class="card-link">比較チャートを見る <b>↗</b></span></div></a>
+          <a class="content-card featured" href="ai_value_chain_analysis.html" data-category="AI・テクノロジー"><div class="card-art art-ai"><span>AI VALUE CHAIN</span><b>AI産業のつながりを分析</b></div><div class="card-body"><span class="tag">AI・テクノロジー</span><h3>AIバリューチェーン分析</h3><p>電力・半導体からクラウド、分析、AI応用まで、関連企業をつながりで捉える。</p><span class="card-link">分析を見る <b>↗</b></span></div></a>
+          <a class="content-card" href="ai_value_chain.heatmap.html" data-category="AI・テクノロジー"><div class="card-art art-heat"><span>AI STOCK · HEATMAP</span><b>関連株の強弱を一目で</b></div><div class="card-body"><span class="tag">AI・テクノロジー</span><h3>AI関連株ヒートマップ</h3><p>AI関連企業の騰落を色分けし、カテゴリーごとの強弱を俯瞰する。</p><span class="card-link">ヒートマップを見る <b>↗</b></span></div></a>
+          <a class="content-card" href="ai_value_chain_category_ytd.html" data-category="AI・テクノロジー"><div class="card-art art-chart"><span>AI STOCK · YTD</span><b>AI関連株の騰落率を比較</b></div><div class="card-body"><span class="tag">AI・テクノロジー</span><h3>AI株騰落率</h3><p>AIバリューチェーンのカテゴリー別に、株価の年初来騰落率を比較する。</p><span class="card-link">騰落率を見る <b>↗</b></span></div></a>
+          <a class="content-card" href="ai_value_chain_global_map.html" data-category="AI・テクノロジー"><div class="card-art art-global"><span>AI · GLOBAL MAP</span><b>世界に広がるAI産業</b></div><div class="card-body"><span class="tag">AI・テクノロジー</span><h3>AIグローバルマップ</h3><p>世界のAI関連企業と、産業のつながりを地図で可視化する。</p><span class="card-link">マップを見る <b>↗</b></span></div></a>
+
+          <!-- 追加予定のコンテンツ：公開後にリンクを設定します。 -->
+          <a class="content-card" href="#" data-category="投資戦略" data-placeholder="true" aria-disabled="true"><div class="card-art art-sim"><span>MONTE CARLO</span><b>未来を確率で考える</b></div><div class="card-body"><span class="tag">投資戦略</span><h3>モンテカルロ・シミュレーション</h3><p>リターンと変動幅から、資産形成の将来を複数パターンで検証。</p><span class="card-link">準備中 <b>…</b></span></div></a>
+          <a class="content-card" href="#" data-category="経済・金融政策" data-placeholder="true" aria-disabled="true"><div class="card-art art-policy"><span>MACRO · POLICY</span><b>政策と市場の関係</b></div><div class="card-body"><span class="tag">経済・金融政策</span><h3>金利・金融政策ウォッチ</h3><p>FRBや日銀の政策が、株式市場に与える影響を整理する。</p><span class="card-link">準備中 <b>…</b></span></div></a>
+          <a class="content-card" href="#" data-category="投資戦略" data-placeholder="true" aria-disabled="true"><div class="card-art art-retire"><span>RETIREMENT PLAN</span><b>長く続ける資産設計</b></div><div class="card-body"><span class="tag">投資戦略</span><h3>資産配分・出口戦略</h3><p>年齢や生活設計に合わせた、資産の育て方と取り崩し方。</p><span class="card-link">準備中 <b>…</b></span></div></a>
+          <a class="content-card" href="#" data-category="株式市場" data-placeholder="true" aria-disabled="true"><div class="card-art art-flow"><span>CAPITAL FLOW</span><b>お金はどこへ向かう？</b></div><div class="card-body"><span class="tag">株式市場</span><h3>市場のマネーフロー</h3><p>金利やリスク環境によって変わる、資金の流れを考える。</p><span class="card-link">準備中 <b>…</b></span></div></a>
+          <a class="content-card" href="#" data-category="経済・金融政策" data-placeholder="true" aria-disabled="true"><div class="card-art art-fx"><span>FX · ECONOMY</span><b>為替と株価をつなぐ</b></div><div class="card-body"><span class="tag">経済・金融政策</span><h3>為替・マクロ分析</h3><p>ドル円やインフレなど、株価の背景にある要因を深掘りする。</p><span class="card-link">準備中 <b>…</b></span></div></a>
+        </div>
+        <p class="placeholder-note">※ 公開済みのコンテンツはリンクから閲覧できます。「準備中」と表示されたコンテンツは、順次追加予定です。</p>
+      </div>
+    </section>
+
+    <section class="closing section-wrap"><p class="section-kicker">KEEP LEARNING</p><h2>知る。考える。<span>自分の未来をつくる。</span></h2><p>見出しだけではわからない、お金と市場の背景を一緒に読み解いていきましょう。</p><a class="primary-button" href="#contents">コンテンツ一覧へ <span>↑</span></a></section>
+  </main>
+
+  <footer class="site-footer"><a class="footer-brand" href="#top">BEYOND THE HEADLINES</a><span>知るほど、未来は変わる。</span><small>© <span id="year"></span> Beyond the Headlines</small></footer>
+  <script src="script.js"></script>
+</body>
+</html>
