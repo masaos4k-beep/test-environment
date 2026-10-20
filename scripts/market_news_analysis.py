@@ -105,7 +105,7 @@ def analyze_market_news(news_items):
     # モデル名は環境変数で変更できるようにする
     model = os.environ.get(
         "GEMINI_MODEL",
-        "gemini-2.5-flash"
+        "gemini-3.8-flash"
     )
 
     response = client.models.generate_content(
