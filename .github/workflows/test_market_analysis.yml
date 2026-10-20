@@ -1,1 +1,35 @@
+name: ニュース分析テスト
 
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリを読み込む
+        uses: actions/checkout@v4
+
+      - name: Pythonをセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 必要なライブラリをインストール
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-genai
+
+      - name: ニュース取得とGemini分析
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/market_news_analysis.py
+
+      - name: 分析結果を表示
+        run: |
+          cat market_analysis.json
