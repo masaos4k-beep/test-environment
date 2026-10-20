@@ -1,3 +1,5 @@
+import time
+from google.genai import errors
 import json
 import os
 import sys
@@ -108,11 +110,39 @@ def analyze_market_news(news_items):
         "gemini-3.8-flash"
     )
 
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt,
-        config={"response_mime_type": "application/json"}
-    )
+   # 一時的なAPIエラーに備えて最大3回試行する
+response = None
+
+for attempt in range(3):
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+            config={"response_mime_type": "application/json"}
+        )
+        break
+
+    except errors.ServerError as e:
+        if attempt == 2:
+            raise
+
+        wait_seconds = 10 * (attempt + 1)
+        print(
+            f"Gemini APIで一時エラーが発生しました。"
+            f"{wait_seconds}秒後に再試行します。"
+            f"（{attempt + 1}/3回目）"
+        )
+        time.sleep(wait_seconds)
+
+if response is None:
+    raise RuntimeError("Gemini APIから応答を取得できませんでした。")
+
+result = json.loads(response.text) 
+   # response = client.models.generate_content(
+   #     model=model,
+   #     contents=prompt,
+   #     config={"response_mime_type": "application/json"}
+   # )
 
     result = json.loads(response.text)
 
