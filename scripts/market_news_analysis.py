@@ -1,30 +1,66 @@
-import time
-from google.genai import errors
 import json
 import os
 import sys
+import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+
 from datetime import datetime, timedelta, timezone
-
 from google import genai
+from google.genai import errors
 
-# Gemini APIの設定
+
+# ============================================================
+# 1. 基本設定
+# ============================================================
+
+# GitHub ActionsのSecretsからAPIキーを取得
 api_key = os.environ.get("GEMINI_API_KEY")
-if not api_key:
-    raise ValueError("GEMINI_API_KEY が設定されていません。")
 
+if not api_key:
+    raise ValueError(
+        "GEMINI_API_KEY が設定されていません。"
+        "GitHub Secretsの設定を確認してください。"
+    )
+
+# Gemini APIクライアント
 client = genai.Client(api_key=api_key)
 
 # 日本時間
 JST = timezone(timedelta(hours=9))
 
+# Geminiのモデル名
+# GitHub Actionsの環境変数で変更することも可能
+MODEL_NAME = os.environ.get(
+    "GEMINI_MODEL",
+    "gemini-3.8-flash"
+)
+
+
+# ============================================================
+# 2. GoogleニュースのRSSからニュースを取得
+# ============================================================
 
 def fetch_google_news(query, max_items=15):
-    """GoogleニュースのRSSからニュースを取得する。"""
+    """
+    GoogleニュースのRSSからニュースを取得する。
+
+    Parameters
+    ----------
+    query : str
+        検索キーワード
+    max_items : int
+        最大取得件数
+
+    Returns
+    -------
+    list
+        ニュース情報のリスト
+    """
 
     encoded_query = urllib.parse.quote(query)
+
     url = (
         "https://news.google.com/rss/search?"
         f"q={encoded_query}&hl=en-US&gl=US&ceid=US:en"
@@ -32,20 +68,42 @@ def fetch_google_news(query, max_items=15):
 
     request = urllib.request.Request(
         url,
-        headers={"User-Agent": "Mozilla/5.0"}
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        }
     )
 
-    with urllib.request.urlopen(request, timeout=20) as response:
+    with urllib.request.urlopen(
+        request,
+        timeout=20
+    ) as response:
         xml_data = response.read()
 
     root = ET.fromstring(xml_data)
+
     news_items = []
 
     for item in root.findall(".//item")[:max_items]:
-        title = item.findtext("title", default="")
-        description = item.findtext("description", default="")
-        link = item.findtext("link", default="")
-        pub_date = item.findtext("pubDate", default="")
+
+        title = item.findtext(
+            "title",
+            default=""
+        )
+
+        description = item.findtext(
+            "description",
+            default=""
+        )
+
+        link = item.findtext(
+            "link",
+            default=""
+        )
+
+        pub_date = item.findtext(
+            "pubDate",
+            default=""
+        )
 
         news_items.append({
             "title": title,
@@ -57,8 +115,17 @@ def fetch_google_news(query, max_items=15):
     return news_items
 
 
+# ============================================================
+# 3. Gemini APIで市場変動の主要因を分析
+# ============================================================
+
 def analyze_market_news(news_items):
-    """ニュースから市場変動の主要因を3つ抽出する。"""
+    """
+    取得したニュースをGemini APIで分析する。
+
+    一時的なサーバーエラーが発生した場合は、
+    最大3回まで再試行する。
+    """
 
     news_text = json.dumps(
         news_items,
@@ -66,30 +133,49 @@ def analyze_market_news(news_items):
         indent=2
     )
 
+    today = datetime.now(JST).strftime("%Y-%m-%d")
+
     prompt = f"""
 あなたは米国株市場を分析するアナリストです。
 
 以下のニュース情報を分析し、前日の米国ハイテク株市場の
-値動きに関連する主要な材料を3つ抽出してください。
+値動きに関連する主要な材料を最大3つ抽出してください。
+
+【分析日】
+{today}
+
+【分析対象】
+米国株市場、NASDAQ、半導体株、AI関連株、
+大型ハイテク株など。
 
 【重要なルール】
-- ニュースに書かれていない事実を作らない。
-- ニュースだけでは因果関係を確認できない場合は、断定しない。
-- 市場全体の動きと個別企業のニュースを区別する。
-- 同じ内容のニュースを重複して数えない。
-- ニュースが十分でない場合は、無理に3つの要因を作らない。
-- ニュースの見出しや概要は、信頼できる情報とは限らないため、
-  確認できない内容は「可能性」「示唆」などの表現を使う。
-- titleは日本語18～22文字。
-- detailは日本語90～110文字。
-- source_titleには根拠に使ったニュースの見出しを入れる。
-- source_urlには根拠に使ったニュースのURLを入れる。
-- 3つの要因を十分に裏付けられない場合は、
-  driversを確認できた件数だけにする。
 
-【JSON形式】
+1. ニュースに書かれていない事実を作らない。
+2. ニュースだけでは因果関係を確認できない場合は断定しない。
+3. 市場全体の動きと個別企業のニュースを区別する。
+4. 同じ内容のニュースを重複して数えない。
+5. ニュースが十分でない場合、無理に3つの要因を作らない。
+6. 確認できない内容は「可能性」「示唆」などの表現を使う。
+7. ニュースの公開日時に注意する。
+8. 分析対象の日付より後に公開されたニュースを、
+   その日の株価変動の原因として扱わない。
+9. 過去のニュースを、当日の新しい材料として扱わない。
+10. 株価データが与えられていないため、実際の値動きや
+    上昇・下落の方向をニュースだけで断定しない。
+11. titleは日本語18～22文字を目安にする。
+12. detailは日本語90～110文字を目安にする。
+13. source_titleには根拠となるニュースの見出しを入れる。
+14. source_urlには根拠となるニュースのURLを入れる。
+15. 十分な根拠がない場合は、driversを空配列にしてもよい。
+
+【出力形式】
+
+有効なJSONだけを出力してください。
+
+次の構造にしてください。
+
 {{
-  "report_date": "YYYY-MM-DD",
+  "report_date": "{today}",
   "drivers": [
     {{
       "title": "要因のタイトル",
@@ -100,60 +186,138 @@ def analyze_market_news(news_items):
   ]
 }}
 
+driversは最大3件です。
+
 【分析対象のニュース】
+
 {news_text}
 """
 
-    # モデル名は環境変数で変更できるようにする
-    model = os.environ.get(
-        "GEMINI_MODEL",
-        "gemini-3.8-flash"
-    )
+    # --------------------------------------------------------
+    # Gemini APIを最大3回呼び出す
+    # --------------------------------------------------------
 
-   # 一時的なAPIエラーに備えて最大3回試行する
-response = None
+    response = None
 
-for attempt in range(3):
+    for attempt in range(3):
+
+        try:
+            print(
+                f"Gemini APIを呼び出します。"
+                f"モデル: {MODEL_NAME}"
+                f"（試行 {attempt + 1}/3）"
+            )
+
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=prompt,
+                config={
+                    "response_mime_type": "application/json"
+                }
+            )
+
+            # 成功したらループを終了
+            break
+
+        except errors.ServerError as e:
+
+            # 最後の試行でも失敗した場合
+            if attempt == 2:
+                print(
+                    "Gemini APIの再試行がすべて失敗しました。",
+                    file=sys.stderr
+                )
+                raise
+
+            # 待機時間を10秒、20秒と増やす
+            wait_seconds = 10 * (attempt + 1)
+
+            print(
+                f"Gemini APIでサーバーエラーが発生しました。"
+                f"{wait_seconds}秒後に再試行します。"
+                f"詳細: {e}",
+                file=sys.stderr
+            )
+
+            time.sleep(wait_seconds)
+
+    if response is None:
+        raise RuntimeError(
+            "Gemini APIから応答を取得できませんでした。"
+        )
+
+    # --------------------------------------------------------
+    # JSONを解析
+    # --------------------------------------------------------
+
     try:
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config={"response_mime_type": "application/json"}
+        result = json.loads(response.text)
+
+    except (json.JSONDecodeError, TypeError) as e:
+        raise ValueError(
+            "Gemini APIの応答をJSONとして解析できませんでした。"
+        ) from e
+
+    # --------------------------------------------------------
+    # 出力データの形式を確認
+    # --------------------------------------------------------
+
+    if not isinstance(result, dict):
+        raise ValueError(
+            "Gemini APIの応答が想定したJSON形式ではありません。"
         )
-        break
 
-    except errors.ServerError as e:
-        if attempt == 2:
-            raise
+    drivers = result.get("drivers")
 
-        wait_seconds = 10 * (attempt + 1)
-        print(
-            f"Gemini APIで一時エラーが発生しました。"
-            f"{wait_seconds}秒後に再試行します。"
-            f"（{attempt + 1}/3回目）"
+    if not isinstance(drivers, list):
+        raise ValueError(
+            "分析結果にdrivers配列がありません。"
         )
-        time.sleep(wait_seconds)
 
-if response is None:
-    raise RuntimeError("Gemini APIから応答を取得できませんでした。")
+    if len(drivers) > 3:
+        result["drivers"] = drivers[:3]
 
-result = json.loads(response.text) 
-   # response = client.models.generate_content(
-   #     model=model,
-   #     contents=prompt,
-   #     config={"response_mime_type": "application/json"}
-   # )
+    # 各要因の必須項目を確認
+    for index, driver in enumerate(result["drivers"], start=1):
 
-    result = json.loads(response.text)
+        if not isinstance(driver, dict):
+            raise ValueError(
+                f"{index}件目の要因がオブジェクト形式ではありません。"
+            )
 
-    # 日付は日本時間で記録
-    result["report_date"] = datetime.now(JST).strftime("%Y-%m-%d")
+        for key in (
+            "title",
+            "detail",
+            "source_title",
+            "source_url"
+        ):
+            if not isinstance(driver.get(key), str):
+                raise ValueError(
+                    f"{index}件目の要因に"
+                    f"{key}がないか、文字列ではありません。"
+                )
+
+    # レポート日を設定
+    result["report_date"] = today
 
     return result
 
 
+# ============================================================
+# 4. メイン処理
+# ============================================================
+
 def main():
-    # 米国株・ハイテク市場に関するニュースを検索
+
+    print("=" * 60)
+    print("米国株ニュース分析を開始します")
+    print(f"分析日: {datetime.now(JST).strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 60)
+
+    # --------------------------------------------------------
+    # ニュース検索キーワード
+    # --------------------------------------------------------
+
     queries = [
         "US stock market Nasdaq technology stocks",
         "US semiconductor stocks Nvidia AI",
@@ -162,41 +326,108 @@ def main():
 
     all_news = []
 
-    for query in queries:
-        try:
-            items = fetch_google_news(query, max_items=15)
-            all_news.extend(items)
-            print(f"取得成功: {query} ({len(items)}件)")
-        except Exception as exc:
-            print(f"ニュース取得失敗: {query}: {exc}", file=sys.stderr)
+    # --------------------------------------------------------
+    # ニュース取得
+    # --------------------------------------------------------
 
-    # URLで重複排除
+    for query in queries:
+
+        try:
+            items = fetch_google_news(
+                query,
+                max_items=15
+            )
+
+            all_news.extend(items)
+
+            print(
+                f"取得成功: {query} "
+                f"({len(items)}件)"
+            )
+
+        except Exception as exc:
+
+            print(
+                f"ニュース取得失敗: {query}: {exc}",
+                file=sys.stderr
+            )
+
+    # --------------------------------------------------------
+    # URLでニュースの重複を排除
+    # --------------------------------------------------------
+
     unique_news = {}
+
     for item in all_news:
-        if item["link"]:
-            unique_news[item["link"]] = item
+
+        link = item.get("link", "")
+
+        if link:
+            unique_news[link] = item
 
     news_items = list(unique_news.values())
 
+    print(
+        f"ニュース取得合計: {len(news_items)}件"
+    )
+
+    # ニュースが取得できなければ処理を終了
     if not news_items:
+
         raise RuntimeError(
             "ニュースを取得できませんでした。"
-            "分析結果は生成せず、処理を終了します。"
+            "分析結果は生成しません。"
         )
 
-    print(f"ニュース取得合計: {len(news_items)}件")
+    # --------------------------------------------------------
+    # Geminiで分析
+    # --------------------------------------------------------
 
     result = analyze_market_news(news_items)
 
-    # 結果をJSONとして保存
+    # --------------------------------------------------------
+    # JSONファイルに保存
+    # --------------------------------------------------------
+
     output_file = "market_analysis.json"
 
-    with open(output_file, "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=2)
+    with open(
+        output_file,
+        "w",
+        encoding="utf-8"
+    ) as f:
 
+        json.dump(
+            result,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    print("=" * 60)
     print(f"分析結果を保存しました: {output_file}")
-    print(json.dumps(result, ensure_ascii=False, indent=2))
+    print("=" * 60)
 
+    # --------------------------------------------------------
+    # 結果をログに表示
+    # --------------------------------------------------------
+
+    print(
+        json.dumps(
+            result,
+            ensure_ascii=False,
+            indent=2
+        )
+    )
+
+    print("=" * 60)
+    print("米国株ニュース分析が完了しました")
+    print("=" * 60)
+
+
+# ============================================================
+# 5. 実行
+# ============================================================
 
 if __name__ == "__main__":
     main()
