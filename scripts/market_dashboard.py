@@ -5,7 +5,7 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime, time
 from zoneinfo import ZoneInfo
-from IPython.display import HTML, display
+# from IPython.display import HTML, display
 
 TZ = ZoneInfo("America/New_York")
 SYMBOLS = [
@@ -341,4 +341,4 @@ with open(output_filename, "w", encoding="utf-8") as f:
     f.write(rendered_html)
 
 print(f"\n🎉 HTMLファイルを書き出しました: {output_filename}")
-display(HTML(rendered_html))
+# display(HTML(rendered_html))
