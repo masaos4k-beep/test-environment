@@ -34,7 +34,7 @@ JST = timezone(timedelta(hours=9))
 # GitHub Actionsの環境変数で変更することも可能
 MODEL_NAME = os.environ.get(
     "GEMINI_MODEL",
-    "gemini-3.8-flash-lite"
+    "gemini-3.1-flash-lite"
 )
 
 
