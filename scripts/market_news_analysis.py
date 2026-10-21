@@ -124,7 +124,7 @@ def analyze_market_news(news_items):
     取得したニュースをGemini APIで分析する。
 
     一時的なサーバーエラーが発生した場合は、
-    最大3回まで再試行する。
+    最大5回まで再試行する。
     """
 
     news_text = json.dumps(
@@ -194,18 +194,19 @@ driversは最大3件です。
 """
 
     # --------------------------------------------------------
-    # Gemini APIを最大3回呼び出す
+    # Gemini APIを最大5回呼び出す
     # --------------------------------------------------------
 
     response = None
+    max_attempts = 5
 
-    for attempt in range(3):
+    for attempt in range(max_attempts):
 
         try:
             print(
                 f"Gemini APIを呼び出します。"
-                f"モデル: {MODEL_NAME}"
-                f"（試行 {attempt + 1}/3）"
+                f"モデル: {MODEL_NAME} "
+                f"（試行 {attempt + 1}/{max_attempts}）"
             )
 
             response = client.models.generate_content(
@@ -222,15 +223,15 @@ driversは最大3件です。
         except errors.ServerError as e:
 
             # 最後の試行でも失敗した場合
-            if attempt == 2:
+            if attempt == max_attempts - 1:
                 print(
                     "Gemini APIの再試行がすべて失敗しました。",
                     file=sys.stderr
                 )
                 raise
 
-            # 待機時間を10秒、20秒と増やす
-            wait_seconds = 10 * (attempt + 1)
+            # 待ち時間を10、20、40、80秒と延ばす
+            wait_seconds = 10 * (2 ** attempt)
 
             print(
                 f"Gemini APIでサーバーエラーが発生しました。"
@@ -311,7 +312,10 @@ def main():
 
     print("=" * 60)
     print("米国株ニュース分析を開始します")
-    print(f"分析日: {datetime.now(JST).strftime('%Y-%m-%d %H:%M:%S')}")
+    print(
+        f"分析日: "
+        f"{datetime.now(JST).strftime('%Y-%m-%d %H:%M:%S')}"
+    )
     print("=" * 60)
 
     # --------------------------------------------------------
@@ -380,13 +384,40 @@ def main():
         )
 
     # --------------------------------------------------------
+    # ニュース取得結果をJSONに保存
+    # --------------------------------------------------------
+
+    news_output_file = "market_news.json"
+
+    with open(
+        news_output_file,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            {
+                "collected_at": datetime.now(JST).isoformat(),
+                "count": len(news_items),
+                "news": news_items
+            },
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    print(
+        f"ニュース取得結果を保存しました: {news_output_file}"
+    )
+
+    # --------------------------------------------------------
     # Geminiで分析
     # --------------------------------------------------------
 
     result = analyze_market_news(news_items)
 
     # --------------------------------------------------------
-    # JSONファイルに保存
+    # AI分析結果をJSONファイルに保存
     # --------------------------------------------------------
 
     output_file = "market_analysis.json"
