@@ -1,11 +1,8 @@
-# 必要なライブラリ: pip install yfinance pandas
-
 import json
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, time
 from zoneinfo import ZoneInfo
-# from IPython.display import HTML, display
 
 TZ = ZoneInfo("America/New_York")
 SYMBOLS = [
@@ -325,20 +322,51 @@ def fetch(item):
         "base_ytd_jpy": round(base_ytd_jpy, 6)
     }
 
+# リポジトリのルートを基準に出力する（GitHub Actionsの実行場所に依存しない）
+from pathlib import Path
+
+repo_root = Path(__file__).resolve().parent.parent
+output_path = repo_root / "market_dashboard.html"
+
+print("=" * 60)
+print("マーケットダッシュボード生成診断")
+print(f"実行時刻（ニューヨーク）: {datetime.now(TZ).strftime('%Y-%m-%d %H:%M:%S %Z')}")
+print(f"出力先: {output_path}")
+
 result = []
+failed_symbols = []
 for item in SYMBOLS:
     try:
-        result.append(fetch(item))
+        data = fetch(item)
+        result.append(data)
+        print(
+            f"[OK] {item['name']} ({item['ticker']}) "
+            f"対象日={data.get('date')} "
+            f"1日データ={len(data.get('regular', []))}件 / "
+            f"1週間={len(data.get('weekly', []))}件 / "
+            f"1ヶ月={len(data.get('monthly', []))}件 / "
+            f"年初来={len(data.get('ytd', []))}件"
+        )
     except Exception as e:
-        print(f"Error fetching {item['name']}: {e}")
-        result.append({"date": datetime.now(TZ).date().isoformat(), "name": item["name"], "ticker": item["ticker"], "previousClose": 100.0, "prev_jpy": 15000.0, "regular": [{"time":"09:30","usd":100,"jpy":15000},{"time":"16:00","usd":100,"jpy":15000}], "weekly": [], "monthly": [], "ytd": []})
+        failed_symbols.append(item['ticker'])
+        print(f"[ERROR] {item['name']} ({item['ticker']}): {type(e).__name__}: {e}")
+        # ダミー株価を表示すると実データと誤認されるため、生成を失敗扱いにする。
+        raise RuntimeError(
+            f"{item['name']} のデータ取得に失敗したため、誤ったダミーデータでHTMLを生成しません。"
+        ) from e
 
-rendered_html = HTML_TEMPLATE.replace("__DATA__", json.dumps(result, ensure_ascii=False, separators=(",", ":")))
+rendered_html = HTML_TEMPLATE.replace(
+    "__DATA__", json.dumps(result, ensure_ascii=False, separators=(",", ":"))
+)
 
-# 出力ファイル名を market_dashboard.html に変更
-output_filename = "market_dashboard.html"
-with open(output_filename, "w", encoding="utf-8") as f:
-    f.write(rendered_html)
+previous_html = output_path.read_text(encoding="utf-8") if output_path.exists() else None
+changed = previous_html != rendered_html
+output_path.write_text(rendered_html, encoding="utf-8")
 
-print(f"\n🎉 HTMLファイルを書き出しました: {output_filename}")
-# display(HTML(rendered_html))
+print("-" * 60)
+print(f"生成対象日: {', '.join(sorted({d['date'] for d in result}))}")
+print(f"取得成功: {len(result)}/{len(SYMBOLS)}銘柄")
+print(f"HTML内容の変更: {'あり' if changed else 'なし（前回と同一）'}")
+print(f"出力ファイル: {output_path.name} ({output_path.stat().st_size:,} bytes)")
+print("🎉 HTMLファイルを書き出しました。")
+print("=" * 60)
