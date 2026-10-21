@@ -1,4 +1,4 @@
-name: ニュース分析テスト
+name: Test Market Analysis
 
 on:
   workflow_dispatch:
@@ -7,29 +7,73 @@ permissions:
   contents: read
 
 jobs:
-  analyze:
+  analyze-market:
     runs-on: ubuntu-latest
 
     steps:
-      - name: リポジトリを読み込む
+      # --------------------------------------------------
+      # 1. GitHubリポジトリを取得
+      # --------------------------------------------------
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Pythonをセットアップ
+      # --------------------------------------------------
+      # 2. Python環境を準備
+      # --------------------------------------------------
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: 必要なライブラリをインストール
+      # --------------------------------------------------
+      # 3. 必要なライブラリをインストール
+      # --------------------------------------------------
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install google-genai
 
-      - name: ニュース取得とGemini分析
+      # --------------------------------------------------
+      # 4. ニュース取得とGemini分析
+      # --------------------------------------------------
+      - name: Run market news analysis
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-3.8-flash
         run: |
           python scripts/market_news_analysis.py
 
-      - name: 分析結果を表示
+      # --------------------------------------------------
+      # 5. 生成されたJSONファイルを表示
+      # --------------------------------------------------
+      - name: Display analysis results
+        if: always()
         run: |
-          cat market_analysis.json
+          echo "===== market_analysis.json ====="
+          if [ -f market_analysis.json ]; then
+            cat market_analysis.json
+          else
+            echo "market_analysis.json は生成されていません"
+          fi
+
+          echo ""
+          echo "===== market_news.json ====="
+          if [ -f market_news.json ]; then
+            cat market_news.json
+          else
+            echo "market_news.json は生成されていません"
+          fi
+
+      # --------------------------------------------------
+      # 6. JSONファイルをダウンロード可能にする
+      # --------------------------------------------------
+      - name: Upload JSON artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: market-analysis-results
+          path: |
+            market_analysis.json
+            market_news.json
+          if-no-files-found: warn
+          retention-days: 7
