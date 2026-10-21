@@ -39,7 +39,7 @@ jobs:
       - name: Run market news analysis
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: gemini-3.8-flash-lite
+          GEMINI_MODEL: gemini-3.1-flash-lite
         run: |
           python scripts/market_news_analysis.py
 
