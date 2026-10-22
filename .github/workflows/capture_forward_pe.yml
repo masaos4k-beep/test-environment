@@ -1,1 +1,51 @@
+name: Capture Forward PE
 
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python libraries
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas playwright
+
+      - name: Install Chromium
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Run Forward PE capture
+        run: |
+          python scripts/3indices_per_capture.py
+
+      - name: Commit generated CSV
+        run: |
+          if [ -f data/forward_pe_3indices_2026.csv ]; then
+            git add data/forward_pe_3indices_2026.csv
+
+            if ! git diff --cached --quiet; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git commit -m "Update forward PE data"
+              git push
+            else
+              echo "CSVに変更がないため、コミットをスキップします。"
+            fi
+          else
+            echo "ERROR: CSVが生成されませんでした。"
+            exit 1
+          fi
