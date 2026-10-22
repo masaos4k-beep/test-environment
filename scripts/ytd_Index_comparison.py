@@ -406,39 +406,40 @@ fig.update_layout(
 # 12. HTMLファイルへ出力
 # ============================================================
 
+# HTMLを生成
 full_html = fig.to_html(
     include_plotlyjs="cdn",
     full_html=True,
     config={
         "responsive": True,
         "displaylogo": False
-    }
+    },
+    default_height="100%",
+    default_width="100%"
 )
 
-OUTPUT_FILE.parent.mkdir(
-    parents=True,
-    exist_ok=True
-)
-
-# 外側のHTML要素に固定されている高さ800pxを100%に変更
-full_html = re.sub(
-    r'<div style="height:800px;\s*width:100%;">',
-    '<div style="height:100%; width:100%;">',
-    full_html
+# HTML全体の高さをブラウザの表示領域に合わせる
+full_html = full_html.replace(
+    "<head>",
+    """<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .plotly-graph-div {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>"""
 )
 
 # HTMLを保存
 with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
     f.write(full_html)
 
-
-print("\n--------------------------------------")
-print("チャートHTMLの生成が完了しました")
-print(f"保存先：{OUTPUT_FILE}")
-print("--------------------------------------")
-
-# GitHub Actionsではブラウザ表示を行わない
-# ローカルで表示したい場合は、次の2行のコメントを外してください。
-#
-# fig.show(config={"responsive": True})
-
+print(f"チャートを出力しました: {OUTPUT_FILE}")
