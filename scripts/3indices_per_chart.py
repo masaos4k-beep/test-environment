@@ -99,7 +99,23 @@ def build_shapes_and_annotations(config):
     shapes = []
     annotations = []
 
-    # 背景のPERゾーン
+    # PERゾーンの背景色と説明
+    zone_colors = {
+        "割安": "rgba(0, 140, 255, 0.18)",
+        "やや割安": "rgba(0, 180, 160, 0.16)",
+        "中立": "rgba(120, 120, 120, 0.18)",
+        "やや割高": "rgba(255, 170, 0, 0.16)",
+        "割高": "rgba(255, 60, 60, 0.18)",
+    }
+
+    zone_labels = {
+        "割安": "割安感が強い",
+        "やや割安": "やや割安",
+        "中立": "妥当な水準",
+        "やや割高": "やや割高",
+        "割高": "割高感が強い",
+    }
+
     for y0, y1, label in config["zones"]:
 
         shapes.append(
@@ -111,17 +127,28 @@ def build_shapes_and_annotations(config):
                 x1=1,
                 y0=y0,
                 y1=y1,
-                fillcolor=(
-                    "rgba(0, 180, 0, 0.07)"
-                    if label == "割安"
-                    else
-                    "rgba(255, 255, 0, 0.05)"
-                    if label == "中立"
-                    else
-                    "rgba(255, 80, 80, 0.05)"
+                fillcolor=zone_colors.get(
+                    label, "rgba(100, 100, 100, 0.1)"
                 ),
                 line=dict(width=0),
                 layer="below",
+            )
+        )
+
+        # ゾーンの上部に説明文を表示
+        annotations.append(
+            dict(
+                xref="paper",
+                x=0.01,
+                yref="y",
+                y=y1 - (y1 - y0) * 0.35,
+                text=f"{zone_labels.get(label, label)}（{y0}～{y1}倍）",
+                showarrow=False,
+                xanchor="left",
+                font=dict(
+                    color="#FFFFFF",
+                    size=12,
+                ),
             )
         )
 
@@ -142,22 +169,6 @@ def build_shapes_and_annotations(config):
                     width=1,
                     dash="dash",
                 ),
-            )
-        )
-
-        annotations.append(
-            dict(
-                xref="paper",
-                x=1.005,
-                y=value,
-                yref="y",
-                text=str(value),
-                showarrow=False,
-                font=dict(
-                    color="#CCCCCC",
-                    size=10,
-                ),
-                xanchor="left",
             )
         )
 
