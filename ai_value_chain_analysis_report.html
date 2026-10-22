@@ -455,9 +455,11 @@ footer a {
 
         <div class="frame-box">
             <iframe
+                id="dashboard-frame"
                 src="ai_value_chain_analysis.html"
                 title="AIバリューチェーン株価ダッシュボード"
-                loading="lazy">
+                scrolling="no"
+                loading="eager">
             </iframe>
         </div>
 
@@ -850,6 +852,41 @@ footer a {
         本ページは情報提供を目的としており、投資判断はご自身の責任で行ってください。
     </div>
 </footer>
+<script>
+const dashboardFrame = document.getElementById("dashboard-frame");
 
+dashboardFrame.addEventListener("load", function () {
+    try {
+        const frameDocument =
+            dashboardFrame.contentDocument ||
+            dashboardFrame.contentWindow.document;
+
+        function adjustHeight() {
+            const body = frameDocument.body;
+            const html = frameDocument.documentElement;
+
+            dashboardFrame.style.height =
+                Math.max(
+                    body.scrollHeight,
+                    html.scrollHeight,
+                    body.offsetHeight,
+                    html.offsetHeight
+                ) + "px";
+        }
+
+        adjustHeight();
+
+        setTimeout(adjustHeight, 500);
+        setTimeout(adjustHeight, 1500);
+
+        window.addEventListener("resize", adjustHeight);
+
+    } catch (error) {
+        console.error("ダッシュボードの高さ調整に失敗しました", error);
+    }
+});
+</script>
 </body>
+
+    
 </html>
