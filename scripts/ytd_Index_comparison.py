@@ -381,6 +381,7 @@ fig.update_layout(
 
     template="plotly_dark",
 
+    height=800,
     autosize=True,
 
     margin=dict(
