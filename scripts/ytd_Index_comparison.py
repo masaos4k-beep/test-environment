@@ -420,8 +420,17 @@ OUTPUT_FILE.parent.mkdir(
     exist_ok=True
 )
 
+# 外側のHTML要素に固定されている高さ800pxを100%に変更
+full_html = re.sub(
+    r'<div style="height:800px;\s*width:100%;">',
+    '<div style="height:100%; width:100%;">',
+    full_html
+)
+
+# HTMLを保存
 with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
     f.write(full_html)
+
 
 print("\n--------------------------------------")
 print("チャートHTMLの生成が完了しました")
