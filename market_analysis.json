@@ -1,23 +1,23 @@
 {
-  "report_date": "2026-10-22",
+  "report_date": "2026-10-23",
   "drivers": [
     {
-      "title": "ハイテク株の反発と市場の回復",
-      "detail": "2026年10月21日の市場では、ハイテク株が回復を見せたことでNASDAQが上昇しました。半導体株やAI関連銘柄の底堅さが意識され、前日の軟調な展開から反発する動きが強まったことが指数を押し上げた要因となった可能性があります。",
-      "source_title": "US Stocks Close: Nasdaq Gains Over 1%, Philadelphia Semiconductor Index Rises Nearly 2%; Tech Stocks Strengthen, SpaceX Gains Nearly 8% Post-Earnings",
-      "source_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPMEF3MElVNUVISFRPRzNKNTVDbkJzdVFjZEJnNHVfQUpIcGpvZVRqZl9neTJabXpuY2RoQjRYX19EdFNuSzFpRW5LMW0yaTJOeUUyWEVNZnlielJadWRBSVpadG1VT1VIZnprajJqVDlqQVRMRnlLRXdObVFkcFk1ZWh0dk9pWEV2Ylh4NUZTdmZUcUkzZG4xZzV0Y0x1TXRLY3M5bGZ2Z0pvVHlRblJTZlV4ZUI5VU5iZ1RpY2VTWUYxOWhUVW02SGR4OHpCaHM?oc=5"
+      "title": "AIへの過度な支出懸念が再燃",
+      "detail": "主要ハイテク企業によるAI関連投資の増大に対し、収益性への懸念が再び市場で強まり、大型ハイテク株を中心とした広範な売り圧力が誘発された。この懸念はAI銘柄全体の重荷となっている可能性が示唆される。",
+      "source_title": "S&P 500, Nasdaq end sharply lower as revived AI doubts ignite tech selloff",
+      "source_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNTWxDZDg5X0padGNvb2k2V2ZkX2tEWW9YWkdjeVdMZHNUTlg1MXY4TmUyTDZHdUhNTHFRNWRPRjc2VFlEN3RXTDhNSjhDYmRfTWZGXzdKYXdLejRHNGgwRVdNbmZRUkFhSm9GakxMek56UUZ2OUtqajd6NVkzRkR1VzBNWlo5VWp5NUFkX2phUjlSSFlndUlNNGxvUXlHSm1wMlpTbkRR?oc=5"
     },
     {
-      "title": "企業決算を背景にした買い戻し",
-      "detail": "一部の企業決算が市場の予想を支える材料となり、テック株への買い戻しが広がりました。特にデータセンター関連の技術や個別企業の好業績が、AI投資への懸念を一時的に和らげ、株価指数の上昇を後押ししたことが示唆されています。",
-      "source_title": "Wall Street Futures Rise as Corporate Earnings Support Technology Stocks: Dow Jones, S&P, Nasdaq",
-      "source_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQbE9WVl9QMjc0NjFFV2FmaC1HSk5iSkpGZ1ZWZU9KMm9hbml2MHg1YXM1Mk5OR0VYQlU2d05RVTBGT0Zpei1aS1N1dkQ2VmpCOWFHMUtKbGJ1Q2RRLXFNNmNTVHZPRHlQNUdmVjlaQ0dFV0NuZ2lBVGdvZUtRTHQ2X0ZlaE1ScDdHYzFRRHdiV2hyY3Y0R0huOWQwVDFPeTZm?oc=5"
+      "title": "中東情勢緊迫化と原油高騰",
+      "detail": "イランを巡る中東情勢の緊迫化が市場の警戒感を強め、原油価格が上昇した。地政学的リスクの高まりとインフレ懸念の再燃が、投資家心理を悪化させる一因として指摘されている。",
+      "source_title": "Markets tumble as concerns about Iran war and high AI spending collide",
+      "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPSVY4cFhVNmoxak9SOVdrbDh3NkozUkd0Wmc3YmtsWW9PWUFQWFgtb25pX2xhV2liWmxyRktLSjgwRkxLRERjaTk0Y1RyLWdFeVVHNFphUDY4aDZyVWhHdWltNnBtM0JWTTFVRXNjY2prMWZnRlJpeUFMeGxnb1VlOGlFWE5FRGNtNlpEUUtKVVFzT2J5dWc?oc=5"
     },
     {
-      "title": "暗号資産関連株の活発な値動き",
-      "detail": "ハイテク株の戻りに加え、暗号資産関連銘柄の活発な上昇が市場のセンチメント改善に寄与しました。CircleやCoinbaseといった銘柄が大幅高となったことが、投資家のリスク選好度を維持する一助となった可能性があります。",
-      "source_title": "U.S. stock market close | Tech stocks staged a late-night comeback from a dire situation, with the Nasdaq edging higher and the Dow gaining more than 1%; cryptocurrency-related stocks were active",
-      "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOMDl0WEY4XzNQZF8wc0EtX1NySExiYmRkMEhrNjB4Z202ZU15OGt2Um1fR3FWeEo0eWhBZi02M1dBdXZONG1LaW9MWmFxTnhCclZJa3BxZVY3clJXeEx4NWNGUGJhckJnX1YxVTc4Y3A5LXRPNFRMWmNXUXh4dWw0TXVVam1wbkZMa0l3YVRGYlBGaDNxWnBTQkJrSVU?oc=5"
+      "title": "個別企業の決算が重荷に",
+      "detail": "Metaなどの主要ハイテク企業の決算内容やガイダンスが、AI投資に対する市場の楽観的な見方を抑制する形となった。これにより、ハイテク株全般に対する投資家の姿勢が慎重化し、株価の重石となった可能性がある。",
+      "source_title": "Stocks drop as Meta dampens AI optimism; Treasury yields fall",
+      "source_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQNmlzbXFUNWNXc3U3RHRac2lYVEhXNjZmZGw0Q19yNVRORUEtak91QlJnTEVqcGhWT2xuT2RmOHdTVHlyN1JmSHRVZEpfMzgtNEVMT1RCWk1VNGswaVFYTXI4WlFpUE95aEJid1NxNVNBdzBGX0pzOUQwMnZnQ25kOVNXQQ?oc=5"
     }
   ]
 }
