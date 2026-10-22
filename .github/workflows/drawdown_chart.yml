@@ -43,4 +43,3 @@ jobs:
             echo "ERROR: 3indices_drawdown_chart.html が生成されませんでした。"
             exit 1
           fi
-```
