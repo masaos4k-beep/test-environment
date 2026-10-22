@@ -1,7 +1,7 @@
 ```yaml
 name: Drawdown Chart
 
-on:
+'on':
   workflow_dispatch:
 
 permissions:
@@ -38,11 +38,10 @@ jobs:
               git commit -m "Update drawdown chart"
               git push
             else
-              echo "HTMLに変更がないため、コミットをスキップします。 "
+              echo "HTMLに変更がないため、コミットをスキップします。"
             fi
           else
             echo "ERROR: 3indices_drawdown_chart.html が生成されませんでした。"
             exit 1
           fi
 ```
-
