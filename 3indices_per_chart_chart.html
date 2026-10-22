@@ -9,22 +9,23 @@
 <style>
 .index-button-area {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     flex-wrap: wrap;
-    gap: 10px;
-    margin: 15px 10px 5px 10px;
+    gap: 6px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    background: #111111;
 }
 
 .index-button {
-    background-color: #333333;
+    background-color: #292929;
     color: #DDDDDD;
-    border: 1px solid #666666;
-    border-radius: 6px;
-    padding: 10px 22px;
-    font-size: 14px;
+    border: 1px solid #444444;
+    border-radius: 4px;
+    padding: 9px 20px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s;
 }
 
 .index-button.active {
@@ -131,23 +132,64 @@ document.addEventListener("DOMContentLoaded", function () {
         return shapes;
     }
 
-    function makeAnnotations(config) {
-        return config.thresholds.map(function (value) {
-            return {
+function makeAnnotations(config) {
+    const annotations = [];
+
+    // PERゾーンの説明文
+    config.shapes.forEach(function (zone) {
+        const y0 = zone[0];
+        const y1 = zone[1];
+
+        let label = "";
+
+        if (y1 <= 18) {
+            label = "割安感が強い";
+        } else if (y0 >= 18 && y1 <= 20) {
+            label = "やや割安";
+        } else if (y0 >= 20 && y1 <= 22) {
+            label = "妥当な水準";
+        } else if (y0 >= 22 && y1 <= 24) {
+            label = "やや割高";
+        } else if (y0 >= 24) {
+            label = "割高感が強い";
+        }
+
+        if (label !== "") {
+            annotations.push({
                 xref: "paper",
-                x: 1.005,
-                y: value,
+                x: 0.01,
                 yref: "y",
-                text: String(value),
+                y: y1 - (y1 - y0) * 0.35,
+                text: label + "（" + y0 + "～" + y1 + "倍）",
                 showarrow: false,
+                xanchor: "left",
                 font: {
-                    color: "#CCCCCC",
-                    size: 10
-                },
-                xanchor: "left"
-            };
+                    color: "#FFFFFF",
+                    size: 12
+                }
+            });
+        }
+    });
+
+    // PER基準線の数値
+    config.thresholds.forEach(function (value) {
+        annotations.push({
+            xref: "paper",
+            x: 1.005,
+            y: value,
+            yref: "y",
+            text: String(value),
+            showarrow: false,
+            font: {
+                color: "#CCCCCC",
+                size: 10
+            },
+            xanchor: "left"
         });
-    }
+    });
+
+    return annotations;
+}
 
     function selectIndex(index) {
         const config = configs[index];
