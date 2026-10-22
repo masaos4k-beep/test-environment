@@ -1,1 +1,46 @@
+name: Generate 3 Indices EPS Price Chart
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-chart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install libraries
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas yfinance plotly
+
+      - name: Generate EPS and Price Chart
+        run: |
+          python scripts/3indices_eps_price_chart.py
+
+      - name: Commit generated HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add 3indices_eps_price_chart.html
+
+          if git diff --cached --quiet; then
+            echo "HTMLに変更はありません"
+          else
+            git commit -m "Update 3 indices EPS price chart"
+            git push
+          fi
 
