@@ -213,4 +213,5 @@ async def main():
 
 
 # 実行
-df_forward_pe = await main()
+if __name__ == "__main__":
+    df_forward_pe = asyncio.run(main())
