@@ -1,6 +1,6 @@
 name: Drawdown Chart
 
-'on':
+on:
   workflow_dispatch:
 
 permissions:
