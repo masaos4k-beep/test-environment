@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 # =========================================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-OUTPUT_FILE = BASE_DIR / "ai_value_chain_global_map.html"
+OUTPUT_FILE = BASE_DIR / "ai_value_chain_map.html"
 
 
 # =========================================================
