@@ -341,7 +341,7 @@ def create_map_trace_data(v_col, l_col):
     names, hovers, values = [], [], []
     text_positions = []
 
-    cat_lats, cat_lons, cat_texts, cat_text_positions = [], [], [], []
+    cat_lats, cat_lons, cat_texts, cat_text_positions, cat_text_sizes = [], [], [], [], []
 
     # ---------------------------------------------
     # 米国
@@ -355,20 +355,21 @@ def create_map_trace_data(v_col, l_col):
 
         row_step = 12.5
         col_step = 11.0
-        label_offset = 6.0
+        label_offset = 27.0
 
         anchor = country_anchors["USA"]
 
         for c_idx, cat in enumerate(categories):
 
             base_row_lat = anchor["lat"] - c_idx * row_step
-            cat_text_lon = anchor["lon"] + 3.0
+            cat_text_lon = anchor["lon"] - 17.0
 
             cat_lats.append(base_row_lat)
             cat_lons.append(cat_text_lon)
             cat_texts.append(f"<b>{cat}</b>")
             # 米国のカテゴリー名は右寄せにして、画面左端で切れないようにする
-            cat_text_positions.append("middle right")
+            cat_text_positions.append("middle left")
+            cat_text_sizes.append(10)
 
             cat_items = usa_df[usa_df["Category"] == cat]
 
@@ -403,6 +404,7 @@ def create_map_trace_data(v_col, l_col):
     cat_lons.append(3.0)
     cat_texts.append("<b>半導体</b>")
     cat_text_positions.append("middle left")
+    cat_text_sizes.append(12)
 
     for country in ["UK", "Netherlands"]:
 
@@ -433,6 +435,7 @@ def create_map_trace_data(v_col, l_col):
     cat_lons.append(138.0)
     cat_texts.append("<b>半導体</b>")
     cat_text_positions.append("middle left")
+    cat_text_sizes.append(12)
 
     asia_countries = ["Taiwan", "Japan", "South Korea"]
     jp_elem_idx = 0
@@ -494,6 +497,7 @@ def create_map_trace_data(v_col, l_col):
         cat_lons,
         cat_texts,
         cat_text_positions,
+        cat_text_sizes,
     )
 
 
@@ -523,6 +527,7 @@ for idx, (_, v_col, l_col, p_range, colorbar_title) in enumerate(periods):
         cat_lons,
         cat_texts,
         cat_text_positions,
+        cat_text_sizes,
     ) = create_map_trace_data(v_col, l_col)
 
     is_visible = idx == 0
@@ -598,7 +603,7 @@ for idx, (_, v_col, l_col, p_range, colorbar_title) in enumerate(periods):
             textposition=cat_text_positions,
 
             textfont=dict(
-                size=12,
+                size=cat_text_sizes,
                 color="#31c487",
             ),
 
