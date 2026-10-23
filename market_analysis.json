@@ -1,23 +1,23 @@
 {
-  "report_date": "2026-10-23",
+  "report_date": "2026-10-24",
   "drivers": [
     {
-      "title": "AIへの過度な支出懸念が再燃",
-      "detail": "主要ハイテク企業によるAI関連投資の増大に対し、収益性への懸念が再び市場で強まり、大型ハイテク株を中心とした広範な売り圧力が誘発された。この懸念はAI銘柄全体の重荷となっている可能性が示唆される。",
-      "source_title": "S&P 500, Nasdaq end sharply lower as revived AI doubts ignite tech selloff",
-      "source_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNTWxDZDg5X0padGNvb2k2V2ZkX2tEWW9YWkdjeVdMZHNUTlg1MXY4TmUyTDZHdUhNTHFRNWRPRjc2VFlEN3RXTDhNSjhDYmRfTWZGXzdKYXdLejRHNGgwRVdNbmZRUkFhSm9GakxMek56UUZ2OUtqajd6NVkzRkR1VzBNWlo5VWp5NUFkX2phUjlSSFlndUlNNGxvUXlHSm1wMlpTbkRR?oc=5"
+      "title": "AI支出懸念が再燃し株価を下押し",
+      "detail": "Metaをはじめとする大手テック企業によるAI投資の巨額な支出に対する懸念が再び高まった。この先行き不安が投資家心理を冷え込ませ、ハイテク株全般の売りを誘発し、市場全体の重石となった。",
+      "source_title": "Nasdaq tumbles while Treasuries soar as Meta rekindles AI spending fears",
+      "source_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxOcjc2Qnc1OUdYaTRkWFNLc1N4MGhZUEk0QWg5UXdkaDdyMF9qcjV2WUFPaW1JeU5oT3VZaTdPdHBpQUYxTy1fb3ctS3NUaWRuS0F3VlJaME9ZVXp2cFJIVEtIaXZUN01PaS1fRi0wQUtaN0VnMzdxMEh0cldyTHRFSVY2czE?oc=5"
     },
     {
-      "title": "中東情勢緊迫化と原油高騰",
-      "detail": "イランを巡る中東情勢の緊迫化が市場の警戒感を強め、原油価格が上昇した。地政学的リスクの高まりとインフレ懸念の再燃が、投資家心理を悪化させる一因として指摘されている。",
+      "title": "原油価格の上昇が市場の逆風に",
+      "detail": "エネルギー価格である原油価格の急伸が、インフレ再燃の懸念を通じて株式市場に悪影響を及ぼした。AIへの懸念と重なり、市場全体の上値を抑える要因として機能したと示唆されている。",
+      "source_title": "Sharp drops for AI stocks overwhelm markets worldwide as oil prices jump",
+      "source_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE54NFI0QklmZmNMaUUzNHczNzhBcE96NzlsZWxQZk53ZlAybGlpSGoydktudkplQWp5STJwNUhYLTFRQjdKZXpyV3lkTG5YWnViODY1aEpSZTc1eWNBaGtwT1dMQkhPSUd4UjJGMGFxZDRPMVp0WURlTkw4NjVBc2M?oc=5"
+    },
+    {
+      "title": "中東情勢の緊張による地政学リスク",
+      "detail": "イランをめぐる戦争への懸念が投資家のリスク回避姿勢を強め、株式市場の急落を招いた。AI支出懸念と地政学リスクという複数の要因が重なり、投資心理が急速に悪化したことが示唆される。",
       "source_title": "Markets tumble as concerns about Iran war and high AI spending collide",
       "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPSVY4cFhVNmoxak9SOVdrbDh3NkozUkd0Wmc3YmtsWW9PWUFQWFgtb25pX2xhV2liWmxyRktLSjgwRkxLRERjaTk0Y1RyLWdFeVVHNFphUDY4aDZyVWhHdWltNnBtM0JWTTFVRXNjY2prMWZnRlJpeUFMeGxnb1VlOGlFWE5FRGNtNlpEUUtKVVFzT2J5dWc?oc=5"
-    },
-    {
-      "title": "個別企業の決算が重荷に",
-      "detail": "Metaなどの主要ハイテク企業の決算内容やガイダンスが、AI投資に対する市場の楽観的な見方を抑制する形となった。これにより、ハイテク株全般に対する投資家の姿勢が慎重化し、株価の重石となった可能性がある。",
-      "source_title": "Stocks drop as Meta dampens AI optimism; Treasury yields fall",
-      "source_url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQNmlzbXFUNWNXc3U3RHRac2lYVEhXNjZmZGw0Q19yNVRORUEtak91QlJnTEVqcGhWT2xuT2RmOHdTVHlyN1JmSHRVZEpfMzgtNEVMT1RCWk1VNGswaVFYTXI4WlFpUE95aEJid1NxNVNBdzBGX0pzOUQwMnZnQ25kOVNXQQ?oc=5"
     }
   ]
 }
