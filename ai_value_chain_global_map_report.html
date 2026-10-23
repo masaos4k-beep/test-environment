@@ -45,7 +45,7 @@ p{margin:8px 0;color:#d3dddd}
 .small{font-size:13px;color:var(--muted)}
 .dashboard-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-bottom:8px}
 .frame-box{width:100%;overflow:hidden;border:1px solid var(--border);border-radius:12px;background:#080b0d}
-.frame-box iframe{display:block;width:100%;height:760px;border:0;background:#080b0d}
+.frame-box iframe{display:block;width:100%;height:540px;border:0;background:#080b0d}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .card{padding:16px;background:var(--panel2);border:1px solid var(--border);border-radius:10px}
 ul{margin:8px 0 0;padding-left:1.3em;color:#d3dddd}
@@ -56,12 +56,12 @@ footer{border-top:1px solid var(--border);padding-top:16px;margin-top:28px;color
  .wrap{padding:12px 12px 28px}
  .hero{padding:14px}
  .panel{padding:15px}
- .frame-box iframe{height:680px}
+ .frame-box iframe{height:500px}
  .grid{grid-template-columns:1fr}
 }
 @media(max-width:480px){
  h1{font-size:23px}
- .frame-box iframe{height:620px}
+ .frame-box iframe{height:460px}
  .button{font-size:13px;padding:8px 10px}
 }
 </style>
@@ -74,7 +74,7 @@ footer{border-top:1px solid var(--border);padding-top:16px;margin-top:28px;color
     <p class="lead">AI産業を支える企業を、電力・半導体から分析・サービスまでのバリューチェーンに沿って整理し、世界地図上で株価の騰落率を比較するダッシュボードです。</p>
     <div class="actions">
       <a class="button" href="index.html">← トップページへ戻る</a>
-      <a class="button primary" href="ai_value_chain_global_map.html" target="_blank" rel="noopener">マップを単独で開く ↗</a>
+      <a class="button primary" href="ai_value_chain_map.html" target="_blank" rel="noopener">マップを単独で開く ↗</a>
     </div>
   </header>
 
@@ -86,7 +86,7 @@ footer{border-top:1px solid var(--border);padding-top:16px;margin-top:28px;color
         <a class="button" href="ai_value_chain_map.html" target="_blank" rel="noopener">大きな画面で表示 ↗</a>
       </div>
       <div class="frame-box">
-        <iframe src="ai_value_chain_global_map.html" title="AIバリューチェーン・グローバルマップ" loading="eager"></iframe>
+        <iframe src="ai_value_chain_map.html" title="AIバリューチェーン・グローバルマップ" loading="eager"></iframe>
       </div>
       <p class="small">※ マップが表示されない場合は、「マップを単独で開く」を選択してください。</p>
     </div>
