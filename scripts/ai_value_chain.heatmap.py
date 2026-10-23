@@ -1,7 +1,5 @@
-import os
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import yfinance as yf
 import plotly.express as px
@@ -9,18 +7,17 @@ import plotly.graph_objects as go
 
 
 # =========================================================
-# 0. 出力先設定
+# 1. 出力先設定
 # =========================================================
 
 # scripts フォルダの1階層上をリポジトリのルートとする
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 出力ファイル
 HTML_FILE = BASE_DIR / "ai_value_chain.heatmap.html"
 
 
 # =========================================================
-# 1. バリューチェーン構造定義
+# 2. AIバリューチェーン構造
 # =========================================================
 
 data_structure = {
@@ -36,38 +33,26 @@ data_structure = {
 
     "Symbol": [
         "CEG", "GEV", "VST",
-
         "NVDA", "AMD", "AVGO", "TSM",
         "6857.T", "8035.T", "ASML", "ARM",
         "MU", "000660.KS", "KXIAY",
-
         "EQIX", "DLR", "SMCI",
-
         "MSFT", "AMZN", "GOOGL", "META",
-
         "PLTR", "SNOW", "DDOG",
-
         "PANW", "CRWD", "S",
-
         "NOW", "ADBE", "CRM",
     ],
 
     "ShortName": [
         "Constellation", "GE Vernova", "Vistra",
-
         "NVIDIA", "AMD", "Broadcom", "TSMC",
         "アドバンテスト", "東京エレクトロン",
         "ASML", "ARM", "Micron",
         "SKハイニックス", "キオクシア",
-
         "Equinix", "Digital Rty", "Supermicro",
-
         "Microsoft", "Amazon", "Alphabet", "Meta",
-
         "Palantir", "Snowflake", "Datadog",
-
         "Palo Alto", "CrowdStrike", "SentinelOne",
-
         "ServiceNow", "Adobe", "Salesforce",
     ],
 }
@@ -76,16 +61,11 @@ df = pd.DataFrame(data_structure)
 
 
 # =========================================================
-# 2. 騰落率計算
+# 3. 騰落率計算関数
 # =========================================================
 
-print("📡 株価データおよび騰落率を取得しています...")
-
-
 def calc_period_change(series):
-    """
-    取得期間の最初と最後の終値から騰落率を計算する。
-    """
+    """期間の最初と最後の終値から騰落率を計算する。"""
 
     clean_series = series.dropna()
 
@@ -108,30 +88,47 @@ def calc_period_change(series):
 
 
 # =========================================================
-# 3. 為替レート取得
+# 4. 為替レート取得
 # =========================================================
 
 try:
 
-    fx_jpy = yf.Ticker("USDJPY=X").history(
-        period="1d",
+    jpy_history = yf.Ticker("USDJPY=X").history(
+        period="5d",
         auto_adjust=False,
-    )["Close"].iloc[-1]
+    )
 
-    fx_krw = yf.Ticker("USDKRW=X").history(
-        period="1d",
+    krw_history = yf.Ticker("USDKRW=X").history(
+        period="5d",
         auto_adjust=False,
-    )["Close"].iloc[-1]
+    )
 
-except Exception:
+    fx_jpy = (
+        float(jpy_history["Close"].dropna().iloc[-1])
+        if not jpy_history.empty
+        else 150.0
+    )
+
+    fx_krw = (
+        float(krw_history["Close"].dropna().iloc[-1])
+        if not krw_history.empty
+        else 1350.0
+    )
+
+except Exception as e:
+
+    print(f"為替取得エラー: {e}")
 
     fx_jpy = 150.0
     fx_krw = 1350.0
 
 
 # =========================================================
-# 4. 銘柄別データ取得
+# 5. 株価・時価総額取得
 # =========================================================
+
+print("株価データを取得しています...")
+
 
 market_caps = []
 
@@ -145,8 +142,9 @@ for name, symbol in zip(
     df["Symbol"],
 ):
 
-    print(f"  取得中: {name} ({symbol})")
+    print(f"取得中: {name} ({symbol})")
 
+    # データ取得失敗時の初期値
     usd_cap = 500.0
 
     v1d, l1d = 0.0, "+0.00%"
@@ -161,6 +159,7 @@ for name, symbol in zip(
         info = tk.info
 
         raw_cap = info.get("marketCap", 0) or 0
+
         currency = info.get("currency", "USD")
 
         # ---------------------------------------------
@@ -171,15 +170,11 @@ for name, symbol in zip(
 
             if currency == "JPY":
 
-                usd_cap = (
-                    raw_cap / fx_jpy
-                ) / 10**8
+                usd_cap = raw_cap / fx_jpy / 10**8
 
             elif currency == "KRW":
 
-                usd_cap = (
-                    raw_cap / fx_krw
-                ) / 10**8
+                usd_cap = raw_cap / fx_krw / 10**8
 
             else:
 
@@ -228,11 +223,16 @@ for name, symbol in zip(
         # ---------------------------------------------
 
         hw = tk.history(
-            period="1wk",
+            period="1mo",
+            interval="1d",
             auto_adjust=False,
         )["Close"].dropna()
 
-        v1w, l1w = calc_period_change(hw)
+        if len(hw) >= 2:
+
+            v1w, l1w = calc_period_change(
+                hw.tail(min(len(hw), 6))
+            )
 
         # ---------------------------------------------
         # 1ヶ月騰落率
@@ -240,6 +240,7 @@ for name, symbol in zip(
 
         hm = tk.history(
             period="1mo",
+            interval="1d",
             auto_adjust=False,
         )["Close"].dropna()
 
@@ -251,6 +252,7 @@ for name, symbol in zip(
 
         hy = tk.history(
             period="ytd",
+            interval="1d",
             auto_adjust=False,
         )["Close"].dropna()
 
@@ -289,7 +291,7 @@ df["L_YTD"] = lbl_ytd
 
 
 # =========================================================
-# 5. カラースケール
+# 6. カラースケール
 # =========================================================
 
 custom_colorscale = [
@@ -304,9 +306,6 @@ custom_colorscale = [
 
 
 def get_auto_scale_range(values_list):
-    """
-    上昇・下落の最大値を基に、0を中心とした色スケールを設定する。
-    """
 
     valid_values = [
         float(v)
@@ -327,30 +326,19 @@ def get_auto_scale_range(values_list):
     return [-limit, limit]
 
 
-range_1d = get_auto_scale_range(
-    df["V_1D"].tolist()
-)
-
-range_1w = get_auto_scale_range(
-    df["V_1W"].tolist()
-)
-
-range_1m = get_auto_scale_range(
-    df["V_1M"].tolist()
-)
-
-range_ytd = get_auto_scale_range(
-    df["V_YTD"].tolist()
-)
+range_1d = get_auto_scale_range(df["V_1D"].tolist())
+range_1w = get_auto_scale_range(df["V_1W"].tolist())
+range_1m = get_auto_scale_range(df["V_1M"].tolist())
+range_ytd = get_auto_scale_range(df["V_YTD"].tolist())
 
 
 # =========================================================
-# 6. 各期間のTreemapを作成
+# 7. Treemap作成関数
 # =========================================================
 
 def create_treemap(value_col, label_col, color_range):
 
-    fig_period = px.treemap(
+    temp_fig = px.treemap(
         df,
         path=[
             px.Constant("全AIバリューチェーン"),
@@ -369,29 +357,20 @@ def create_treemap(value_col, label_col, color_range):
         ],
     )
 
-    # 親階層の色を消去
-    colors = list(
-        fig_period.data[0].marker.colors
-    )
+    # 親階層の色をクリア
+    colors = list(temp_fig.data[0].marker.colors)
 
-    parent_ids = set(
-        fig_period.data[0].parents
-    )
+    parent_ids = set(temp_fig.data[0].parents)
 
-    for idx, node_id in enumerate(
-        fig_period.data[0].ids
-    ):
+    for idx, node_id in enumerate(temp_fig.data[0].ids):
 
         if node_id in parent_ids:
             colors[idx] = None
 
-    fig_period.data[0].marker.colors = colors
+    temp_fig.data[0].marker.colors = colors
 
-    fig_period.update_traces(
-        texttemplate=(
-            "<b>%{label}</b><br>"
-            "(%{customdata[2]})"
-        ),
+    temp_fig.update_traces(
+        texttemplate="<b>%{label}</b><br>(%{customdata[2]})",
 
         hovertemplate=(
             "<b>%{label}</b> (%{customdata[0]})"
@@ -413,36 +392,17 @@ def create_treemap(value_col, label_col, color_range):
         ),
     )
 
-    return fig_period.data[0]
+    return temp_fig.data[0]
 
 
-trace_1d = create_treemap(
-    "V_1D",
-    "L_1D",
-    range_1d,
-)
-
-trace_1w = create_treemap(
-    "V_1W",
-    "L_1W",
-    range_1w,
-)
-
-trace_1m = create_treemap(
-    "V_1M",
-    "L_1M",
-    range_1m,
-)
-
-trace_ytd = create_treemap(
-    "V_YTD",
-    "L_YTD",
-    range_ytd,
-)
+trace_1d = create_treemap("V_1D", "L_1D", range_1d)
+trace_1w = create_treemap("V_1W", "L_1W", range_1w)
+trace_1m = create_treemap("V_1M", "L_1M", range_1m)
+trace_ytd = create_treemap("V_YTD", "L_YTD", range_ytd)
 
 
 # =========================================================
-# 7. Figure統合
+# 8. Figure作成
 # =========================================================
 
 fig = go.Figure()
@@ -458,18 +418,24 @@ fig.data[2].visible = False
 fig.data[3].visible = False
 
 
-# =========================================================
-# 8. 期間切り替えボタン
-# =========================================================
+# カラーバーはcoloraxisに統一
+fig.update_traces(
+    marker=dict(
+        coloraxis="coloraxis"
+    )
+)
 
-# HTML上部にボタンを作り、JavaScriptでPlotlyの表示を切り替える。
-# Plotly内蔵のドロップダウンは使用しない。
 
 fig.update_layout(
+
+    # ★重要：Plotly側のタイトルを明示的に削除
+    title=None,
+
     coloraxis=dict(
         colorscale=custom_colorscale,
         cmin=range_1d[0],
         cmax=range_1d[1],
+
         colorbar=dict(
             title=dict(
                 text="1日騰落率 (%)",
@@ -478,22 +444,12 @@ fig.update_layout(
                     size=13,
                 ),
             ),
+
             tickfont=dict(
                 color="white",
             ),
-            x=1.01,
-        ),
-    ),
 
-    title=dict(
-        text="<b>AIバリューチェーン 期間別ヒートマップ</b>",
-        x=0.01,
-        xanchor="left",
-        y=0.98,
-        yanchor="top",
-        font=dict(
-            size=21,
-            color="white",
+            x=1.01,
         ),
     ),
 
@@ -509,8 +465,9 @@ fig.update_layout(
 
     autosize=True,
 
+    # タイトルを削除したので上部余白を縮小
     margin=dict(
-        t=75,
+        t=10,
         l=10,
         r=100,
         b=10,
@@ -524,27 +481,33 @@ fig.update_layout(
 
 
 # =========================================================
-# 9. HTML出力
+# 9. Plotly HTML生成
 # =========================================================
 
-print()
-print("💾 HTMLを生成しています...")
+print("HTMLを生成しています...")
 
 
-# Plotly本体のHTMLを生成
 plot_html = fig.to_html(
     include_plotlyjs="cdn",
     full_html=False,
+
     config={
         "responsive": True,
         "displaylogo": False,
     },
+
     div_id="heatmap-chart",
+
+    default_height="100%",
+    default_width="100%",
 )
 
 
-# HTML全体を構成
-html_content = r"""
+# =========================================================
+# 10. HTML全体
+# =========================================================
+
+html_template = r"""
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -561,10 +524,6 @@ html_content = r"""
 
 <style>
 
-:root {
-    color-scheme: dark;
-}
-
 * {
     box-sizing: border-box;
 }
@@ -573,10 +532,15 @@ html,
 body {
     margin: 0;
     padding: 0;
+
     width: 100%;
-    min-height: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
     background: #080b0d;
     color: #f0f5f3;
+
     font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -585,24 +549,24 @@ body {
         sans-serif;
 }
 
-body {
-    overflow-x: hidden;
-}
-
 .topbar {
     width: 100%;
+    height: 76px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     gap: 16px;
-    flex-wrap: wrap;
-    padding: 12px 20px;
+
+    padding: 10px 20px;
+
     background: #0b1012;
     border-bottom: 1px solid #29363a;
 }
 
 .page-title {
-    font-size: 19px;
+    font-size: 21px;
     font-weight: 700;
     color: #f0f5f3;
 }
@@ -611,26 +575,30 @@ body {
     display: flex;
     gap: 6px;
     align-items: center;
-    flex-wrap: wrap;
+
     padding: 4px;
+
     border: 1px solid #29363a;
     border-radius: 8px;
+
     background: #151e22;
 }
 
 .period-btn {
     min-width: 76px;
-    padding: 9px 14px;
+
+    padding: 10px 14px;
+
     border: 1px solid transparent;
     border-radius: 6px;
+
     background: transparent;
     color: #a0b0b2;
+
     font-size: 14px;
     font-weight: 700;
+
     cursor: pointer;
-    transition:
-        background 0.15s ease,
-        color 0.15s ease;
 }
 
 .period-btn:hover {
@@ -646,9 +614,12 @@ body {
 
 .chart-container {
     width: 100%;
-    height: calc(100vh - 65px);
-    min-height: 450px;
+    height: calc(100vh - 76px);
+
     padding: 0;
+    margin: 0;
+
+    overflow: hidden;
 }
 
 #heatmap-chart {
@@ -665,7 +636,11 @@ body {
 @media (max-width: 700px) {
 
     .topbar {
+        height: auto;
+        min-height: 110px;
+
         padding: 10px;
+
         align-items: flex-start;
         flex-direction: column;
     }
@@ -676,6 +651,7 @@ body {
 
     .period-buttons {
         width: 100%;
+
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
@@ -687,8 +663,7 @@ body {
     }
 
     .chart-container {
-        height: 75vh;
-        min-height: 400px;
+        height: calc(100vh - 110px);
     }
 }
 
@@ -779,7 +754,12 @@ const periodSettings = [
 
 function changePeriod(index) {
 
-    const visible = [false, false, false, false];
+    const visible = [
+        false,
+        false,
+        false,
+        false
+    ];
 
     visible[index] = true;
 
@@ -787,9 +767,11 @@ function changePeriod(index) {
 
     Plotly.update(
         "heatmap-chart",
+
         {
             visible: visible
         },
+
         {
             "coloraxis.cmin": settings.cmin,
             "coloraxis.cmax": settings.cmax,
@@ -814,21 +796,15 @@ document.querySelectorAll(".period-btn").forEach(
 
         button.addEventListener("click", () => {
 
-            const index = Number(
-                button.dataset.period
+            changePeriod(
+                Number(button.dataset.period)
             );
 
-            changePeriod(index);
         });
     }
 );
 
 
-// 初期表示は1日
-changePeriod(0);
-
-
-// 画面サイズ変更時にチャートを再調整
 window.addEventListener("resize", () => {
 
     const chart = document.getElementById(
@@ -838,70 +814,52 @@ window.addEventListener("resize", () => {
     if (chart) {
         Plotly.Plots.resize(chart);
     }
+
 });
 
 </script>
 
 </body>
-
 </html>
 """
 
 
 # =========================================================
-# 10. HTMLの置換と保存
+# 11. 値を埋め込んで保存
 # =========================================================
 
-html_content = html_content.replace(
+html_content = html_template.replace(
     "__PLOT_HTML__",
     plot_html,
 )
 
-html_content = html_content.replace(
-    "__RANGE_1D_MIN__",
-    str(range_1d[0]),
-)
+replacements = {
+    "__RANGE_1D_MIN__": range_1d[0],
+    "__RANGE_1D_MAX__": range_1d[1],
 
-html_content = html_content.replace(
-    "__RANGE_1D_MAX__",
-    str(range_1d[1]),
-)
+    "__RANGE_1W_MIN__": range_1w[0],
+    "__RANGE_1W_MAX__": range_1w[1],
 
-html_content = html_content.replace(
-    "__RANGE_1W_MIN__",
-    str(range_1w[0]),
-)
+    "__RANGE_1M_MIN__": range_1m[0],
+    "__RANGE_1M_MAX__": range_1m[1],
 
-html_content = html_content.replace(
-    "__RANGE_1W_MAX__",
-    str(range_1w[1]),
-)
+    "__RANGE_YTD_MIN__": range_ytd[0],
+    "__RANGE_YTD_MAX__": range_ytd[1],
+}
 
-html_content = html_content.replace(
-    "__RANGE_1M_MIN__",
-    str(range_1m[0]),
-)
+for placeholder, value in replacements.items():
 
-html_content = html_content.replace(
-    "__RANGE_1M_MAX__",
-    str(range_1m[1]),
-)
-
-html_content = html_content.replace(
-    "__RANGE_YTD_MIN__",
-    str(range_ytd[0]),
-)
-
-html_content = html_content.replace(
-    "__RANGE_YTD_MAX__",
-    str(range_ytd[1]),
-)
+    html_content = html_content.replace(
+        placeholder,
+        str(value),
+    )
 
 
 HTML_FILE.write_text(
     html_content,
     encoding="utf-8",
 )
+
 
 print()
 print("=" * 55)
