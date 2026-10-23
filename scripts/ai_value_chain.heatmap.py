@@ -675,7 +675,9 @@ body {
 
 <header class="topbar">
 
-
+    <div class="page-title">
+        AIバリューチェーン 期間別ヒートマップ
+    </div>
 
     <nav
         class="period-buttons"
