@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 # scripts フォルダの1階層上をリポジトリのルートとする
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-HTML_FILE = BASE_DIR / "ai_value_chain.heatmap.html"
+HTML_FILE = BASE_DIR / "ai_value_chain_heatmap.html"
 
 
 # =========================================================
