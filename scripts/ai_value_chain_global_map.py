@@ -341,7 +341,7 @@ def create_map_trace_data(v_col, l_col):
     names, hovers, values = [], [], []
     text_positions = []
 
-    cat_lats, cat_lons, cat_texts = [], [], []
+    cat_lats, cat_lons, cat_texts, cat_text_positions = [], [], [], []
 
     # ---------------------------------------------
     # 米国
@@ -362,11 +362,13 @@ def create_map_trace_data(v_col, l_col):
         for c_idx, cat in enumerate(categories):
 
             base_row_lat = anchor["lat"] - c_idx * row_step
-            cat_text_lon = anchor["lon"] - 2.0
+            cat_text_lon = anchor["lon"] + 3.0
 
             cat_lats.append(base_row_lat)
             cat_lons.append(cat_text_lon)
             cat_texts.append(f"<b>{cat}</b>")
+            # 米国のカテゴリー名は右寄せにして、画面左端で切れないようにする
+            cat_text_positions.append("middle right")
 
             cat_items = usa_df[usa_df["Category"] == cat]
 
@@ -400,6 +402,7 @@ def create_map_trace_data(v_col, l_col):
     cat_lats.append(64.0)
     cat_lons.append(3.0)
     cat_texts.append("<b>半導体</b>")
+    cat_text_positions.append("middle left")
 
     for country in ["UK", "Netherlands"]:
 
@@ -429,6 +432,7 @@ def create_map_trace_data(v_col, l_col):
     cat_lats.append(48.0)
     cat_lons.append(138.0)
     cat_texts.append("<b>半導体</b>")
+    cat_text_positions.append("middle left")
 
     asia_countries = ["Taiwan", "Japan", "South Korea"]
     jp_elem_idx = 0
@@ -489,6 +493,7 @@ def create_map_trace_data(v_col, l_col):
         cat_lats,
         cat_lons,
         cat_texts,
+        cat_text_positions,
     )
 
 
@@ -517,6 +522,7 @@ for idx, (_, v_col, l_col, p_range, colorbar_title) in enumerate(periods):
         cat_lats,
         cat_lons,
         cat_texts,
+        cat_text_positions,
     ) = create_map_trace_data(v_col, l_col)
 
     is_visible = idx == 0
@@ -589,7 +595,7 @@ for idx, (_, v_col, l_col, p_range, colorbar_title) in enumerate(periods):
             mode="text",
 
             text=cat_texts,
-            textposition="middle left",
+            textposition=cat_text_positions,
 
             textfont=dict(
                 size=12,
