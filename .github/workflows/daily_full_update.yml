@@ -91,7 +91,6 @@ jobs:
             ai_value_chain_global_map.html \
             articles.json
 
-          # 存在する場合だけ追加するファイル
           for file in market_dashboard.html market_news_analysis.html; do
             if [ -f "$file" ]; then
               git add "$file"
@@ -100,11 +99,27 @@ jobs:
             fi
           done
 
+          echo "=== Git status ==="
+          git status --short
+
+          echo "=== Unstaged changes ==="
+          git diff --stat
+
           if git diff --cached --quiet; then
             echo "生成ファイルに変更はありません。"
           else
             git commit -m "Daily update: market charts and AI analysis"
-            git fetch origin main
-            git rebase origin/main
-            git push origin HEAD:main
           fi
+
+          echo "=== Git status after commit ==="
+          git status --short
+
+          git fetch origin main
+
+          if ! git diff --quiet || ! git diff --cached --quiet; then
+            echo "未コミットの変更が残っています。詳細は上のGit statusを確認してください。"
+            exit 1
+          fi
+
+          git rebase origin/main
+          git push origin HEAD:main
