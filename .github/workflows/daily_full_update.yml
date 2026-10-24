@@ -80,8 +80,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add \
-            market_dashboard.html \
-            market_news_analysis.html \
             ytd_Index_comparison.html \
             SP500_2026_target.html \
             data/forward_pe_3indices_2026.csv \
@@ -92,6 +90,15 @@ jobs:
             ai_value_chain_heatmap.html \
             ai_value_chain_global_map.html \
             articles.json
+
+          # 存在する場合だけ追加するファイル
+          for file in market_dashboard.html market_news_analysis.html; do
+            if [ -f "$file" ]; then
+              git add "$file"
+            else
+              echo "ファイルが見つかりません: $file"
+            fi
+          done
 
           if git diff --cached --quiet; then
             echo "生成ファイルに変更はありません。"
