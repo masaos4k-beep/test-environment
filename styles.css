@@ -380,3 +380,107 @@ font-size: 12px;
 }
 }
 
+/* ========================================
+MARKET WATCH：コンパクト・淡色デザイン
+======================================== */
+
+.market-watch {
+padding-top: 28px;
+padding-bottom: 28px;
+}
+
+.market-watch-panel {
+background: linear-gradient(135deg, #26374a, #202e40);
+border: 1px solid rgba(150, 170, 195, 0.25);
+padding: 14px 20px;
+}
+
+.market-watch-subtitle {
+color: #c3cfdd;
+font-size: 10px;
+margin-bottom: 8px;
+}
+
+.market-watch-indices {
+gap: 8px;
+}
+
+.market-watch-index {
+padding: 10px 14px;
+background: rgba(255, 255, 255, 0.045);
+border: 1px solid rgba(190, 205, 225, 0.16);
+}
+
+.market-watch-index-name {
+color: #d0dae6;
+font-size: 11px;
+}
+
+.market-watch-index-change {
+margin-top: 3px;
+font-size: clamp(20px, 2.2vw, 27px);
+}
+
+.market-watch-loading {
+padding: 8px;
+}
+
+.market-watch-news {
+margin-top: 14px;
+padding-top: 12px;
+border-top: 1px solid rgba(190, 205, 225, 0.16);
+}
+
+.market-watch-news-heading {
+margin-bottom: 5px;
+}
+
+.market-watch-news-heading h3 {
+color: #e0e7f0;
+font-size: 13px;
+}
+
+#market-watch-headlines li a {
+padding: 7px 0;
+color: #d5deea;
+font-size: 12px;
+line-height: 1.6;
+}
+
+.market-watch-more {
+margin-top: 10px;
+padding: 9px 13px;
+background: rgba(120, 160, 205, 0.09);
+border-color: rgba(150, 180, 215, 0.22);
+color: #c5dcf5;
+font-size: 11px;
+}
+
+@media (max-width: 600px) {
+.market-watch {
+padding-top: 20px;
+padding-bottom: 20px;
+}
+
+.market-watch-panel {
+padding: 12px;
+}
+
+.market-watch-index {
+padding: 9px 12px;
+}
+
+.market-watch-index-change {
+font-size: 23px;
+}
+
+.market-watch-news {
+margin-top: 10px;
+padding-top: 9px;
+}
+
+#market-watch-headlines li a {
+padding: 6px 0;
+font-size: 12px;
+}
+}
