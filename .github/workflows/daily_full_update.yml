@@ -89,7 +89,9 @@ jobs:
             ai_value_chain_analysis.html \
             ai_value_chain_heatmap.html \
             ai_value_chain_global_map.html \
-            articles.json
+            articles.json \
+            market_analysis.json \
+            market_news.json
 
           for file in market_dashboard.html market_news_analysis.html; do
             if [ -f "$file" ]; then
@@ -99,25 +101,17 @@ jobs:
             fi
           done
 
-          echo "=== Git status ==="
-          git status --short
-
-          echo "=== Unstaged changes ==="
-          git diff --stat
-
           if git diff --cached --quiet; then
             echo "生成ファイルに変更はありません。"
           else
             git commit -m "Daily update: market charts and AI analysis"
           fi
 
-          echo "=== Git status after commit ==="
-          git status --short
-
           git fetch origin main
 
           if ! git diff --quiet || ! git diff --cached --quiet; then
-            echo "未コミットの変更が残っています。詳細は上のGit statusを確認してください。"
+            echo "未コミットの変更が残っています。"
+            git status --short
             exit 1
           fi
 
