@@ -110,7 +110,6 @@ return String(value || "")
 function findIndexCard(doc, definition) {
 const cards = [...doc.querySelectorAll("#dashboard .card")];
 
-```
 return cards.find(card => {
   const nameElement = card.querySelector(".name");
   const tickerElement = card.querySelector(".ticker");
@@ -123,14 +122,12 @@ return cards.find(card => {
     cardText.includes(normalizeText(match))
   );
 });
-```
 
 }
 
 function readChange(card) {
 const changeElement = card?.querySelector(".change");
 
-```
 if (!changeElement) return null;
 
 const text = changeElement.textContent.trim();
@@ -139,14 +136,12 @@ const text = changeElement.textContent.trim();
 const match = text.match(/[+\-＋−]?\s*\d+(?:[.,]\d+)?\s*%/);
 
 return match ? match[0].replace(/\s/g, "").replace(",", ".") : null;
-```
 
 }
 
 function classifyChange(value) {
 if (!value) return "market-watch-neutral";
 
-```
 const number = Number(
   value.replace("%", "").replace("＋", "+").replace("−", "-")
 );
@@ -156,7 +151,6 @@ if (number > 0) return "market-watch-positive";
 if (number < 0) return "market-watch-negative";
 
 return "market-watch-neutral";
-```
 
 }
 
@@ -164,7 +158,6 @@ function renderIndices() {
 try {
 const doc = dashboardFrame.contentDocument;
 
-```
   if (!doc || !doc.querySelector("#dashboard .card")) {
     return false;
   }
@@ -212,7 +205,6 @@ const doc = dashboardFrame.contentDocument;
   console.warn("市場ダッシュボードの読み取りに失敗しました。", error);
   return false;
 }
-```
 
 }
 
@@ -222,7 +214,6 @@ const response = await fetch("market_analysis.json", {
 cache: "no-store"
 });
 
-```
   if (!response.ok) {
     throw new Error("market_analysis.json の取得に失敗しました");
   }
@@ -267,14 +258,12 @@ cache: "no-store"
   li.textContent = "ニュース見出しを取得できませんでした。";
   headlinesContainer.appendChild(li);
 }
-```
 
 }
 
 function waitForDashboard(attempt = 0) {
 if (renderIndices()) return;
 
-```
 if (attempt >= 20) {
   indicesContainer.replaceChildren();
 
@@ -288,7 +277,6 @@ if (attempt >= 20) {
 }
 
 window.setTimeout(() => waitForDashboard(attempt + 1), 1000);
-```
 
 }
 
