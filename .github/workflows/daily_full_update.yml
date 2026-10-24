@@ -104,6 +104,7 @@ jobs:
             echo "生成ファイルに変更はありません。"
           else
             git commit -m "Daily update: market charts and AI analysis"
-            git pull --rebase origin main
+            git fetch origin main
+            git rebase origin/main
             git push origin HEAD:main
           fi
