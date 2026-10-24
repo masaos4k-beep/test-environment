@@ -41,6 +41,8 @@ jobs:
 
       - name: 市場ニュース分析を生成
         run: python scripts/market_news_analysis.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: 年初来指数比較を生成
         run: python scripts/ytd_Index_comparison.py
