@@ -31,7 +31,7 @@ jobs:
       - name: 必要なライブラリをインストール
         run: |
           python -m pip install --upgrade pip
-          pip install pandas numpy yfinance plotly playwright
+          pip install pandas numpy yfinance plotly playwright google-genai
 
       - name: Chromiumをインストール
         run: python -m playwright install --with-deps chromium
