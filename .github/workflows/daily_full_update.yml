@@ -1,7 +1,6 @@
 name: Daily Full Market and AI Update
 
 on:
-  # 毎朝 7:45（日本時間）に実行。daily_market_update.yml の7:30より後に開始します。
   schedule:
     - cron: "45 21 * * *"
   workflow_dispatch:
@@ -36,6 +35,12 @@ jobs:
 
       - name: Chromiumをインストール
         run: python -m playwright install --with-deps chromium
+
+      - name: 市場ダッシュボードを生成
+        run: python scripts/market_dashboard.py
+
+      - name: 市場ニュース分析を生成
+        run: python scripts/market_news_analysis.py
 
       - name: 年初来指数比較を生成
         run: python scripts/ytd_Index_comparison.py
@@ -73,6 +78,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add \
+            market_dashboard.html \
+            market_news_analysis.html \
             ytd_Index_comparison.html \
             SP500_2026_target.html \
             data/forward_pe_3indices_2026.csv \
