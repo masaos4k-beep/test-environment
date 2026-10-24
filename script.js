@@ -303,4 +303,3 @@ waitForDashboard();
 
 loadHeadlines();
 })();
-
