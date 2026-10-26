@@ -1,17 +1,23 @@
 {
-  "report_date": "2026-10-26",
+  "report_date": "2026-10-27",
   "drivers": [
     {
-      "title": "AI投資継続への懸念再燃によるテック株売却",
-      "detail": "Meta等の企業が示したAI投資への巨額支出計画に対し、投資家が収益性への懸念を強めたことで、ハイテク株を中心に広範な売り圧力がかかりました。市場ではAI関連支出の持続可能性を疑問視する見方が急速に広がっています。",
-      "source_title": "US tech stocks tumble as investors fret over AI spending",
-      "source_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNT2xmdU1Ga0VLeGtTMlBVN0tjdEZYUmNHYTZIZnRNWjBRVUs2SGUxU0pKdDRpSGpyZC1ESDNGdDZ2OWQ2UTNjcmQ3RWJtVVpCaXNDOElGQ2lUVHJEdDRIR2VRdXFYZkl0Vm1TX2o4VDVNb2pSNnFpSHNXc2dqbXBIVFU5NGcyc3BWSzZqSXpZMFdKMENIaUFZNjhXdjJnalRObzR30gGoAUFVX3lxTFAzbm1pU1E3Y2ZjTVRTZTk1QzhHVmtaWmNReEJTbENyWHRaOEhqWWQ4Y01VTFdXeE9aaEhzMVJfdVBLckxzMFlqeTlSSDNCM2hkdGhJYjB0ZHZRWW9uak14RUJ6cW42b2lMbW1oYmxkU3d6UjNnUTRxdkRoaFFrT0FNbU8tcnFrWS1lNVNmUV85ZkF1U21qajdpYXFKeXU0T0JVM1Npb0tjTQ?oc=5"
+      "title": "大手ハイテク決算とFOMCを控え期待先行",
+      "detail": "主要テック企業の決算発表と連邦準備制度理事会（Fed）の政策決定を控え、市場では先行きの不透明感があるものの、ハイテク株への期待感が相場を下支えする動きが見られた。投資家は企業の業績と今後の経済動向を慎重に見極めようとしている。",
+      "source_title": "U.S. stocks advance ahead of key tech earnings, Fed decision",
+      "source_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQT0hfS1lxYXdFclRJLWQ5X1ZOQnBiQk1ZUVNzMU51UEtLbHMwbWJQcmNWcWthRkpYcUVGR3BsSTVUMVZjV2JmRzVFY04ybE9nbmY1UkdyOEdPRWZyNnlfWTJSQ0tRVTlNdTQ2bVZ3NUJZdTFtalFWOWJmTFliMHNnR29Ydm9BNzdm?oc=5"
     },
     {
-      "title": "原油価格の上昇に伴う市場の警戒感拡大",
-      "detail": "原油価格の上昇が投資家の警戒感を高め、株価全体の下落要因となりました。AI関連支出への懸念というテック固有の材料に加え、エネルギー価格の上昇が市場心理の冷え込みを助長し、指数を押し下げる結果となりました。",
-      "source_title": "Surging oil prices and fresh tech jitters are hammering stocks",
-      "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOWXp3YnNZOEN0MWQzbzVpYVNUWjFYZUs1aDVrbF9DVlktUm4wYUdHUUo0cmZFSXB6WUhtek1hNVRVd1F6MExBLWZmR3Riblp2UVRxZXg1Wi1yckx6UVJwVUxITUZxd1N4MzVRc19MYm9XdEtDVnExMHVCTU9KZUZ6Z1I2eFBCcE4tTld6Yk5hWUxqMTlFbERXV0xB?oc=5"
+      "title": "AI銘柄の反発がNASDAQ指数を牽引",
+      "detail": "最近の株価下落を受けてAI関連銘柄に買い戻しが入った。Anthropic社のIPO申請などの好材料も重なり、ハイテク株が反発したことでNASDAQ指数を押し上げた。ただし、AI支出への懸念は根強く、市場のボラティリティは続いている。",
+      "source_title": "Stock Market Today, Oct. 26: AI Optimism Lifts Nasdaq as Tech Stocks Rebound",
+      "source_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOLVlYOW5FLXE4YjN5WVV3N1FVQUJjVXBrSDVvVTJlVnlLU0QxTkVwODJJUzNJVko0VUtoMmljT1I2VUdmOFJBdTgweDhKSmx3OVhvMTFBZGM1REtubXZ5LVM3VDVtV08xYTIySmlVMEpNdHZKak9aZ21tUXREMGZsbFo2Z1dYSkRjdVFjTWpJWWM5bUdULWFUeEF3cmYxVVdJQTQ0Nk1RWUtqclZGUnE2YWV3RTUtSXROT19VRUp0WGJ4bEZCcVR1bzhDMjFNeEk?oc=5"
+    },
+    {
+      "title": "インテル株上昇で半導体セクターに光",
+      "detail": "インテル株がウォール街のアナリストによる投資判断の引き上げを受けて5%急騰した。AI関連の需要や期待が再燃し、半導体セクター全体を押し上げる要因となった。半導体株は依然としてAI市場の先行きを占う重要指標として注目されている。",
+      "source_title": "Intel (NASDAQ:INTC) Stock Surges 5% as Wall Street Upgrade Sets US$125 Price Target",
+      "source_url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBjNDN4SFhxV2MyZkpSdlpOZ21lRUM2UjkxRjdtQ3FKbXUyU3pZLXVORExVRDVoX0xFNmwwRHpPNktvZzVqcG1MNVZuMjRXRUdFQmFHX1E1YWJrNENVdHA2LXd6X1o1aXVqVHBqb0RSbDJIVkFaeXl2ag?oc=5"
     }
   ]
 }
